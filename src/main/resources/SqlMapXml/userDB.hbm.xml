@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="Bean.User" table="zhiyongtest.UserProfile">
+        <id name="userName" type="java.lang.String">
+            <column name="userName"></column>
+        </id>
+        <property name="hashValue" type="java.lang.String">
+            <column name="hashValue"></column>
+        </property>
+        <property name="emailAddress" type="java.lang.String">
+            <column name="emailAddress"></column>
+        </property>
+        <property name="nickName" type="java.lang.String">
+            <column name="nickName"></column>
+        </property>
+        <property name="profilePicture" type="java.lang.String">
+            <column name="profilePicture"></column>
+        </property>
+        <property name="location" type="java.lang.String">
+            <column name="location"></column>
+        </property>
+        <property name="personalDescription" type="java.lang.String">
+            <column name="personalDescription"></column>
+        </property>
+        <property name="rsaPublicKey" type="java.lang.String">
+            <column name="rsaPublicKey"></column>
+        </property>
+
+    </class>
+</hibernate-mapping>
