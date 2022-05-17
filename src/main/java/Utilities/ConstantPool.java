@@ -12,9 +12,9 @@ public class ConstantPool {
    public static final String TYPE_SIGNUP="1";
    public static final String TYPE_LOGIN="2";
    public static final String TYPE_GETUSERINFO="3";
-   public static final String TYPE_MESSAGE="4";
    public static final String TYPE_ACK="5";
    public static final String TYPE_CONTACT="6";
+   public static final String TYPE_MESSAGE="4";
 
    public static final String CONTACT_REQUEST="1";
    public static final String CONTACT_APPROVE="2";

@@ -18,11 +18,11 @@ public class SignUp_Service {
     public static Map SignUp(Map<String,String> map){
         String userString=map.get(ConstantPool.CONTENT);
         User user=JsonTool.getUser(userString);
-        String s=Database_Service.SignUpToDB(user);
+        String s=Database_Service.SignUpToDB(user);// SF(fail) or SS(success)
 
         ReplayMessage rm=new ReplayMessage();
-        rm.setContent(s);
-        rm.setMessageId(map.get(ConstantPool.MESSAGE_ID));
+        rm.setContent(s);//Content:SS
+        rm.setMessageId(map.get(ConstantPool.MESSAGE_ID));//MessageId:xxxxxxx
         String string=JsonTool.objectToString(rm);
         Map<String,String> m=new HashMap<>();
         m.put("TYPE","RE_SIGNUP");

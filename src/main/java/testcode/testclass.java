@@ -3,6 +3,7 @@ import Bean.*;
 import Bean.User;
 import Utilities.ConstantPool;
 import Utilities.JsonTool;
+import lombok.SneakyThrows;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -12,6 +13,9 @@ import Service.*;
 import redis.clients.jedis.Connection;
 import redis.clients.jedis.Jedis;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,34 +65,21 @@ public void testuser(){
     System.out.println(zhiyong.getUserName());
 }
 
-@Test
-    public void testAddData(){
-    //创建Configuration
-    Configuration config=new Configuration().configure(ConstantPool.HIBERNATE_CONFIG_PATH);
-    //获取SessionFactory
-    SessionFactory sessionFactory = config.buildSessionFactory();
-    //获取Session
-    Session session=sessionFactory.openSession();
-    testMysql t=new testMysql();
-    t.setId(3333321);
-    t.setName("zhiyong");
-    t.setPhone(893745);
-    session.save(t);
-    session.beginTransaction().commit();
-    session.close();
-    }
 
 @Test
     public void signupTest(){
-    User user=new User();
-    user.setUserName("zhiyongjian");
-    user.setHashValue("passworad");
-    user.setLocation("zhiyongjian");
-    user.setNickName("baba");
-    user.setRsaPublicKey("asjdfhakjsdfhlasdhfljhfa1231dfgkjasfkl");
-    user.setEmailAddress("vincent313@foxmail.com");
-    String s=Database_Service.SignUpToDB(user);
-    System.out.println(s);
+    User a=new User();
+    a.setUserName("vincent313");
+    a.setEmailAddress("vincent313@foxmail.com");
+    a.setNickName("zhiyong");
+    a.setRsaPublicKey("24sdfqwrwer");
+    a.setLocation("longyan");
+    a.setPersonalDescription("cooking man");
+    a.setHashValue("thisisapasswordhash");
+    a.setProfilePicture("personalfilepicture.com/link");
+
+   Database_Service.SignUpToDB(a);
+
 
     }
 @Test
@@ -157,5 +148,82 @@ public void redisttest(){
         m.setReceiver("123");
         System.out.println(m1.equals(m));
     }
+
+    @SneakyThrows
+    @Test
+    public void signintest(){
+       User a=new User();
+        a.setUserName("vincent313");
+        a.setEmailAddress("vincent313@foxmail.com");
+        a.setNickName("zhiyong");
+        a.setRsaPublicKey("24sdfqwrwer");
+        a.setLocation("longyan");
+        a.setPersonalDescription("cooking man");
+        a.setHashValue("thisisapasswordhash");
+        a.setProfilePicture("personalfilepicture.com/link");
+        Map<String,String> map1=new HashMap<String,String>();
+        map1.put("TYPE","1");
+        map1.put("MID","signupmessageID001");
+        map1.put("CONTENT",JsonTool.objectToString(a));
+
+        String result=JsonTool.objectToString(map1);
+        File file=new File("./result.txt");
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        FileWriter fw=new FileWriter(file.getAbsoluteFile());
+        BufferedWriter bw=new BufferedWriter(fw);
+        bw.write(result);
+        bw.close();
+    }
+    @Test
+public void loginintest(){
+        Map<String,String> map=new HashMap<String,String>();
+        Map<String,String> map1=new HashMap<String,String>();
+        map1.put("USER","thisisausername");
+        map1.put("PASS","thisisapasswordhash");
+        map.put("TYPE","2");
+        map.put("MID","loginmessage0001");
+        map.put("CONTENT",JsonTool.objectToString(map1));
+        String s=JsonTool.objectToString(map);
+        System.out.println(s);
 }
+@Test
+public void getuserinfotest(){
+    Map<String,String> map=new HashMap<String,String>();
+    map.put("TYPE","6");
+    Message message=new Message();
+    message.setMessageId("friendsrequest001");
+    message.setType("1");
+    message.setSender("zhiyong313");
+    message.setReceiver("vincent313");
+    message.setContent("tianjiahaoyoushenqing");
+    map.put("CONTENT",JsonTool.objectToString(message));
+    System.out.println(JsonTool.objectToString(map));
+
+}
+@Test
+public void generateAckmessage(){
+        ReplayMessage rm=new ReplayMessage();
+        rm.setMessageId("friendsrequest001");
+         Map<String,String> map=new HashMap<String,String>();
+     map.put("TYPE","5");
+    map.put("CONTENT", JsonTool.objectToString(rm));
+    System.out.println(JsonTool.objectToString(map));
+}
+
+@Test
+    public void generateMSG(){
+    Message message=new Message();
+    message.setMessageId("normalmessage001");
+    message.setSender("zhiyong313");
+    message.setReceiver("vincent313");
+    message.setContent("first message test 000001");
+    Map<String,String> map=new HashMap<String,String>();
+    map.put("TYPE","4");
+    map.put("CONTENT",JsonTool.objectToString(message));
+    System.out.println(JsonTool.objectToString(map));
+}
+}
+
 

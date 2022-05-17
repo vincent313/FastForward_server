@@ -31,10 +31,7 @@ public class Message_Service {
 
         //Message m= JsonTool.stringToMessage(s);
         Message m=JsonTool.stringToMessage(map.get("CONTENT"));
-        /*    Date dNow = new Date( );
-            SimpleDateFormat ft = new SimpleDateFormat ("dd-MM-yyyy HH:mm:ss");
-            m.setTime(ft.format(dNow));*/
-            m.setTime(String.valueOf(new Date().getTime()));
+         m.setTime(String.valueOf(new Date().getTime()));
 
 
         /***判断好友并回复消息
@@ -51,12 +48,13 @@ public class Message_Service {
             rm.setContent("MS");
 
         }else{
-            rm.setMessageId("MF");
+            rm.setContent("MF");
         }
         //回复成功或者失败消息
         Map<String,String> m1=new HashMap<String,String>();
         m1.put("TYPE","RE_MESSAGE");
         m1.put("CONTENT",JsonTool.objectToString(rm));
+        System.out.println(JsonTool.objectToString(rm));
         myConnection.sendMessage(m1);
 
         //如果发件人不是收件人好友,发送信息错误后,返回

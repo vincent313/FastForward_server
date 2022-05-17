@@ -29,8 +29,8 @@ public class LogIn_Service {
         String messageId=map.get(ConstantPool.MESSAGE_ID);
         String s=map.get(ConstantPool.CONTENT);
         Map<String,String> loginInfo= JsonTool.stringToMap(s);
-        String username=loginInfo.get("USERNAME");
-        String password=loginInfo.get("PASSWORD");
+        String username=loginInfo.get("USER");
+        String password=loginInfo.get("PASS");
         boolean flag=Database_Service.vetifyUser(username,password);
 
         //新建回复的Map
@@ -43,6 +43,7 @@ public class LogIn_Service {
 
         if(flag){
             myconnection.setUsername(username);//设置好myconnection中的username
+            myconnection.setLogin(true);
             Online_UserManagement_Service.addOnLineUser(username,myconnection);//添加在线用户到几个表内
             replayMessage.setContent("LS");
             replayMap.put("CONTENT",JsonTool.objectToString(replayMessage));
@@ -51,7 +52,8 @@ public class LogIn_Service {
             //回复客户端登录成功了以后,拉取消息发送给客户,到message_service里面处理(转map格式,及加入等待ack池)
             List<Message> list=Database_Service.loadOffLineMsg(username);//拉取对应客户的消息列表
             for(Message message:list){          //列表内消息推送给用户
-            Message_Service.sendMsgToOnlineUser(message, ConstantPool.TYPE_MESSAGE);
+                if(message.getType()==null){Message_Service.sendMsgToOnlineUser(message, ConstantPool.TYPE_MESSAGE);}
+            else{Message_Service.sendMsgToOnlineUser(message, ConstantPool.TYPE_CONTACT);}
             }
 
         }else{

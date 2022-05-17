@@ -1,6 +1,7 @@
 package Service;
 
 import Bean.ReplayMessage;
+import Bean.User;
 import Utilities.ConstantPool;
 import Utilities.JsonTool;
 

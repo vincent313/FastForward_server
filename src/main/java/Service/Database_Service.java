@@ -22,7 +22,7 @@ public class Database_Service {
     public synchronized static String SignUpToDB(User user){
         Session session=sessionFactory.openSession();
         User u=(User)session.get(User.class, user.getUserName());
-        session.close();
+
         if(u!=null){
             return ConstantPool.SIGNUP_FAIL;
         }else{

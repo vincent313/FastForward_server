@@ -52,12 +52,15 @@ public class Contacts_Manage_Service {
                 return;
             case ConstantPool.CONTACT_APPROVE: //2
                 friendsRespond(message,true);
+                return;
 
             case ConstantPool.CONTACT_DECLINE: //3
                 friendsRespond(message,false);
+                return;
 
             case ConstantPool.CONTACT_DELETE: //4
                 deleteFriends(message);
+                return;
         }
     }
 
@@ -75,15 +78,19 @@ public class Contacts_Manage_Service {
         jedis.connect();
         //如果请求不存在(message id),或者好友请求的发送方接收方与记录不相符,返回
         if(!jedis.exists(message.getMessageId())){return;}
-        if(!message.equals(jedis.get(message.getMessageId()))){return;}
+        Message message1=JsonTool.stringToMessage(jedis.get(message.getMessageId()));
+        if(!message.equals(message1)){
+            return;}
         jedis.del(message.getMessageId());
         jedis.close();
         String s1=message.getSender();
         String s2=message.getReceiver();
 
-       //如果是通过好友,添加到好友列表
-        if (flag){addContanct(s1,s2);}
 
+       //如果是通过好友,添加到好友列表
+        if (flag){
+            addContanct(s1,s2);
+        }
         //将发送人(请求方)  收件人(接收方)调换顺序后,发送消息通知给添加好友的请求方
         message.setSender(s2);
         message.setReceiver(s1);
@@ -96,7 +103,6 @@ public class Contacts_Manage_Service {
         if(jedis.sismember(message.getSender(),message.getReceiver())){
             jedis.srem(message.getSender(),message.getReceiver());
         }
-
         jedis.close();
     }
 
